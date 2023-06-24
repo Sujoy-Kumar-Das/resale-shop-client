@@ -1,5 +1,5 @@
 import React from "react";
-import bgImage from "../../../../assets/laptopBG-image.jpg";
+import bgImage from "../../../assets/laptopBG-image.jpg";
 import { Link } from "react-router-dom";
 const Banner = () => {
   return (

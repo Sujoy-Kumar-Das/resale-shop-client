@@ -1,7 +1,8 @@
 import React from "react";
 import { useQuery } from "react-query";
-import Spiner from "../../../../shared/spiner/Spiner";
-import ProductCard from "../../../../shared/productCard/ProductCard";
+import Spiner from "../../../shared/spiner/Spiner";
+import ProductCard from "../../../shared/productCard/ProductCard";
+
 
 const Products = () => {
   let limit = 3;
