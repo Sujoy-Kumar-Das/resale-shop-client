@@ -27,7 +27,7 @@ const Banner = () => {
               <button className=" btn btn-primary">Take a tour</button>
             </Link>
             <Link to={"/login"}>
-              <button className=" btn btn-secondary">Join us</button>
+              <button className=" btn btn-info">Join us</button>
             </Link>
           </div>
         </div>
