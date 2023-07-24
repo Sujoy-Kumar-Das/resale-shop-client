@@ -19,14 +19,13 @@ const AboutUs = () => {
   if (isLoading) {
     return <Spiner></Spiner>;
   }
-  console.log(teamMembers);
   return (
     <section className="">
       <h3 className=" text-center text-3xl font-bold mb-8">Who We Are ?</h3>
       <div className=" grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
-      {
-        teamMembers.map(teamMember => <AboutCard key={teamMember._id} teamMember={teamMember}></AboutCard>)
-      }
+        {teamMembers.map((teamMember) => (
+          <AboutCard key={teamMember._id} teamMember={teamMember}></AboutCard>
+        ))}
       </div>
     </section>
   );
