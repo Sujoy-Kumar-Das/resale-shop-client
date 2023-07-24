@@ -48,6 +48,14 @@ const ProductDetail = () => {
         <p className=" text-center text-2xl my-3">Seller Information</p>
         <SellerInfoTable productDetail={productDetail}></SellerInfoTable>
       </div>
+      <div className=" flex justify-center mt-5">
+        <button
+          className="btn btn-accent"
+          onClick={() => window.buy_now_modal.showModal()}
+        >
+          Buy Now
+        </button> 
+      </div>
     </section>
   );
 };

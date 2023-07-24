@@ -35,6 +35,7 @@ const AllProducts = () => {
           <AllProductCard key={product._id} product={product}></AllProductCard>
         ))}
       </div>
+      
     </section>
   );
 };

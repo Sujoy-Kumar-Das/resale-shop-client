@@ -15,10 +15,13 @@ const AllProductCard = ({ product }) => {
         <p>Original Price:${original_price}.00</p>
         <p>Resale Price :${resale_price}.00</p>
 
-        <div className="card-actions">
-          <Link to={`/products/detail/${_id}`}>
-            <button className="btn btn-info mt-2">Show Detail</button>
+        <div className="mt-2">
+          <Link className="btn btn-info  me-2" to={`/products/detail/${_id}`}>
+            Show Detail
           </Link>
+          <button className="btn btn-accent" onClick={() => window.buy_now_modal.showModal()}>
+            Buy Now
+          </button>
         </div>
       </div>
     </div>
