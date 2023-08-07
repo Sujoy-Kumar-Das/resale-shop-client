@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Spiner from "../shared/spiner/Spiner";
 import ProductConfigTable from "./ProductConfigTable";
 import HardWareConfigTable from "./HardWareConfigTable";
 import SellerInfoTable from "./SellerInfoTable";
+import { BuyNowContextProvider } from "../../contexts/BuyNowContext";
+import { AuthContextProvider } from "../../contexts/authContext/AuthContext";
 
 const ProductDetail = () => {
+  // contexts
+  const {user} = useContext(AuthContextProvider);
+  const { setBuyingData } = useContext(BuyNowContextProvider);
   const params = useParams();
   const { data: productDetail = [], isLoading } = useQuery({
     queryKey: ["/products/detail"],
@@ -25,7 +30,6 @@ const ProductDetail = () => {
   if (isLoading) {
     return <Spiner></Spiner>;
   }
-  console.log(productDetail);
   return (
     <section className=" my-5">
       <p className=" text-center text-2xl mb-5">
@@ -49,12 +53,15 @@ const ProductDetail = () => {
         <SellerInfoTable productDetail={productDetail}></SellerInfoTable>
       </div>
       <div className=" flex justify-center mt-5">
-        <button
-          className="btn btn-accent"
-          onClick={() => window.buy_now_modal.showModal()}
+        <label
+          onClick={() => {
+            setBuyingData(productDetail);
+          }}
+          htmlFor="buy_now_modal"
+          className={`btn ${!user ? " btn-disabled" : "btn-accent"}`}
         >
           Buy Now
-        </button> 
+        </label>
       </div>
     </section>
   );

@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { BuyNowContextProvider } from "../../contexts/BuyNowContext";
+import { AuthContextProvider } from "../../contexts/authContext/AuthContext";
 
 const AllProductCard = ({ product }) => {
+  // contexts
+  const { user } = useContext(AuthContextProvider);
+  const { setBuyingData } = useContext(BuyNowContextProvider);
+
   const { _id, image, model, condition, resale_price, original_price } =
     product;
   return (
@@ -19,9 +25,15 @@ const AllProductCard = ({ product }) => {
           <Link className="btn btn-info  me-2" to={`/products/detail/${_id}`}>
             Show Detail
           </Link>
-          <button className="btn btn-accent" onClick={() => window.buy_now_modal.showModal()}>
+          <label
+            onClick={() => {
+              setBuyingData(product);
+            }}
+            htmlFor="buy_now_modal"
+            className={`btn ${!user ? " btn-disabled":"btn-accent"}`}
+          >
             Buy Now
-          </button>
+          </label>
         </div>
       </div>
     </div>

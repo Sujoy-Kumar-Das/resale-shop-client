@@ -26,7 +26,7 @@ const Banner = () => {
             <Link to={"/products/catagorys"}>
               <button className=" btn btn-primary">Take a tour</button>
             </Link>
-            <Link to={"/login"}>
+            <Link to={"/registration/singup"}>
               <button className=" btn btn-info">Join us</button>
             </Link>
           </div>

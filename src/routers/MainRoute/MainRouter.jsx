@@ -5,6 +5,10 @@ import Error from "../../pages/shared/error/Error";
 import AllProductsCatagory from "../../pages/productCatagory/AllProductsCatagory";
 import AllProducts from "../../pages/allProucts/AllProducts";
 import ProductDetail from "../../pages/productDetail/ProductDetail";
+import Login from "../../pages/registaration/login/Login";
+import LoginLayout from "../../layouts/loginLayout/LoginLayout";
+import SingUp from "../../pages/registaration/singup/SingUp";
+import ResetPage from "../../pages/registaration/resetPage/ResetPage";
 
 export const router = createBrowserRouter([
   {
@@ -23,8 +27,26 @@ export const router = createBrowserRouter([
       {
         path:"/products/detail/:id",
         element:<ProductDetail></ProductDetail>
-      }
+      },
     ],
+  },
+  {
+    path:'/registration',
+    element:<LoginLayout></LoginLayout>,
+    children:[
+      {
+        path:"/registration/login",
+        element:<Login></Login>
+      },
+      {
+        path:"/registration/singup",
+        element:<SingUp></SingUp>
+      },
+      {
+        path:"/registration/reset-password",
+        element:<ResetPage></ResetPage>
+      }
+    ]
   },
   { path: "*", element: <Error></Error> },
 ]);

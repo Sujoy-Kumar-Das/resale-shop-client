@@ -1,11 +1,26 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthContextProvider } from "../../../contexts/authContext/AuthContext";
+import { toast } from "react-hot-toast";
+import { FaUser } from "react-icons/fa6";
+import brandImage from "../../../assets/pngwing.com.png";
 
 const Header = () => {
+  // contexts
+  const { user, logOut } = useContext(AuthContextProvider);
+  // states
   const [isOpen, setIsOpen] = useState(false);
-
+  // toggle dropdown
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+  };
+  // handle singout
+  const handleSingout = () => {
+    logOut()
+      .then(() => {
+        toast.success("Singout successfully");
+      })
+      .catch((error) => console.log(error));
   };
   const menuItems = (
     <>
@@ -51,12 +66,19 @@ const Header = () => {
             </ul>
           )}
         </div>
-        <Link className="btn btn-ghost normal-case text-xl hidden lg:block">
-          daisyUI
+        <Link
+          to={"/"}
+          className="btn btn-ghost normal-case text-xl hidden lg:block"
+        >
+          <img src={brandImage} className=" inline w-[50px]" alt="" />
+          <span className="ms-1 italic">Resale Station</span>
         </Link>
       </div>
-      <Link className="btn btn-ghost normal-case text-xl lg:hidden text-center">
-        daisyUI
+      <Link
+        to={"/"}
+        className="btn btn-ghost normal-case text-xl lg:hidden text-center"
+      >
+        <span className="ms-1">Resale Station</span>
       </Link>
       <div className="navbar-center hidden lg:block">
         <ul className=" menu menu-horizontal px-1 ">{menuItems}</ul>
@@ -68,7 +90,13 @@ const Header = () => {
             onClick={toggleDropdown}
           >
             <div className="w-10 rounded-full">
-              <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+              {user && user?.uid ? (
+                <img src={user?.photoURL} alt="" />
+              ) : (
+                <p className=" mt-2 ms-2 text-2xl">
+                  <FaUser></FaUser>
+                </p>
+              )}
             </div>
           </button>
           {isOpen && (
@@ -82,9 +110,18 @@ const Header = () => {
               <li>
                 <a>Settings</a>
               </li>
-              <li>
-                <a>Logout</a>
-              </li>
+              {user && user?.uid ? (
+                <button
+                  onClick={handleSingout}
+                  className=" btn btn-xs btn-info"
+                >
+                  Singout
+                </button>
+              ) : (
+                <li>
+                  <Link to={"/registration/singup"}>Singup</Link>
+                </li>
+              )}
             </ul>
           )}
         </div>
