@@ -6,7 +6,8 @@ import { toast } from "react-hot-toast";
 const BuyNowModal = () => {
   // auth context
   const { user } = useContext(AuthContextProvider);
-  const { buyingData, setBuyingData } = useContext(BuyNowContextProvider);
+  const { refresh, setRefresh } = useContext(BuyNowContextProvider);
+  const { bookedProduct, setbookedProduct } = useContext(BuyNowContextProvider);
   // states
   const [loading, setLoading] = useState(false);
   // handleBuyNowForm
@@ -23,9 +24,9 @@ const BuyNowModal = () => {
       email,
       phone,
       address,
-      orderProductID: buyingData?._id,
+      orderProductID: bookedProduct?._id,
     };
-    fetch(`http://localhost:5000/post-order`, {
+    fetch(`http://localhost:5000/post-order?productId=${bookedProduct?._id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,13 +38,16 @@ const BuyNowModal = () => {
         if (data.success) {
           toast.success(data.message);
           setLoading(false);
-          setBuyingData(null);
+          setbookedProduct(null);
+          setRefresh(!refresh);
         } else {
           toast.error(data.message);
-          setBuyingData(false);
+          setLoading(false);
         }
       })
-      .catch((error) => console.log(error));
+      .catch(() => {
+        setLoading(false);
+      });
   };
   return (
     <>
@@ -57,7 +61,7 @@ const BuyNowModal = () => {
             ✕
           </label>
           <h3 className="text-lg font-bold uppercase">
-            Order for {buyingData?.model}
+            Order for {bookedProduct?.model}
           </h3>
           <form
             onSubmit={handleBuyNowForm}

@@ -10,8 +10,8 @@ import { AuthContextProvider } from "../../contexts/authContext/AuthContext";
 
 const ProductDetail = () => {
   // contexts
-  const {user} = useContext(AuthContextProvider);
-  const { setBuyingData } = useContext(BuyNowContextProvider);
+  const { user } = useContext(AuthContextProvider);
+  const { setbookedProduct } = useContext(BuyNowContextProvider);
   const params = useParams();
   const { data: productDetail = [], isLoading } = useQuery({
     queryKey: ["/products/detail"],
@@ -53,15 +53,19 @@ const ProductDetail = () => {
         <SellerInfoTable productDetail={productDetail}></SellerInfoTable>
       </div>
       <div className=" flex justify-center mt-5">
-        <label
-          onClick={() => {
-            setBuyingData(productDetail);
-          }}
-          htmlFor="buy_now_modal"
-          className={`btn ${!user ? " btn-disabled" : "btn-accent"}`}
-        >
-          Buy Now
-        </label>
+        {productDetail?.booked ? (
+          <button className=" btn btn-disabled">booked</button>
+        ) : (
+          <label
+            onClick={() => {
+              setbookedProduct(productDetail);
+            }}
+            htmlFor="buy_now_modal"
+            className={`btn ${!user ? " btn-disabled" : "btn-accent"}`}
+          >
+            Buy Now
+          </label>
+        )}
       </div>
     </section>
   );

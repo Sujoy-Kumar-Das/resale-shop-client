@@ -7,12 +7,12 @@ import { BuyNowContextProvider } from "./contexts/BuyNowContext";
 
 const App = () => {
   const queryClient = new QueryClient();
-  const { buyingData } = useContext(BuyNowContextProvider);
+  const { bookedProduct } = useContext(BuyNowContextProvider);
   return (
     <div className=" max-w-[95%] mx-auto">
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router}></RouterProvider>
-        {buyingData && <BuyNowModal></BuyNowModal>}
+        {bookedProduct && <BuyNowModal></BuyNowModal>}
       </QueryClientProvider>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Social from "../social/Social";
 import { Controller, useForm } from "react-hook-form";
 import { AuthContextProvider } from "../../../contexts/authContext/AuthContext";
@@ -20,6 +20,8 @@ const SingUp = () => {
   const [firebaseError, setFirebaseError] = useState("");
   const [accept, setAccpet] = useState(false);
   const [loading, setLoading] = useState(false);
+  // hooks
+  const navigate = useNavigate();
   // validate image file type
   const validateImage = (file) => {
     const allowedExtantions = ["image/png", "image/jpg", "image/jpeg"];
@@ -53,6 +55,7 @@ const SingUp = () => {
   };
   // handle singup
   const handleSingup = async (data) => {
+    setLoading(true);
     const name = data.name;
     const email = data.email;
     const password = data.password;
@@ -60,10 +63,10 @@ const SingUp = () => {
     const role = data.role;
     try {
       // Create user
-      setLoading(true);
       await singupWithEmailAndPass(email, password);
       // Update user profile
       await updateUserProfile(name, image, email, role);
+      navigate("/");
     } catch (error) {
       setFirebaseError(error.message);
       setLoading(false);

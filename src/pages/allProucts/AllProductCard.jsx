@@ -6,10 +6,11 @@ import { AuthContextProvider } from "../../contexts/authContext/AuthContext";
 const AllProductCard = ({ product }) => {
   // contexts
   const { user } = useContext(AuthContextProvider);
-  const { setBuyingData } = useContext(BuyNowContextProvider);
+  const { setbookedProduct } = useContext(BuyNowContextProvider);
 
-  const { _id, image, model, condition, resale_price, original_price } =
+  const { _id, image, model, condition, resale_price, original_price, booked } =
     product;
+
   return (
     <div className="card  bg-base-100 shadow-xl">
       <figure className="px-10 pt-10">
@@ -20,20 +21,24 @@ const AllProductCard = ({ product }) => {
         <p>Condition : {condition} </p>
         <p>Original Price:${original_price}.00</p>
         <p>Resale Price :${resale_price}.00</p>
-
+        <p>Status:{booked ? "Booked" : "Available"}</p>
         <div className="mt-2">
           <Link className="btn btn-info  me-2" to={`/products/detail/${_id}`}>
             Show Detail
           </Link>
-          <label
-            onClick={() => {
-              setBuyingData(product);
-            }}
-            htmlFor="buy_now_modal"
-            className={`btn ${!user ? " btn-disabled":"btn-accent"}`}
-          >
-            Buy Now
-          </label>
+          {booked ? (
+            <button className=" btn btn-disabled">booked</button>
+          ) : (
+            <label
+              onClick={() => {
+                setbookedProduct(product);
+              }}
+              htmlFor="buy_now_modal"
+              className={`btn ${!user ? " btn-disabled" : "btn-accent"} `}
+            >
+              Buy Now
+            </label>
+          )}
         </div>
       </div>
     </div>

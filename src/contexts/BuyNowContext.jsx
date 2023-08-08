@@ -2,9 +2,9 @@ import React, { createContext, useState } from "react";
 
 export const BuyNowContextProvider = createContext();
 const BuyNowContext = ({ children }) => {
-  const [buyingData, setBuyingData] = useState(null);
-
-  const BuyNowContextValue = { buyingData, setBuyingData };
+  const [bookedProduct, setbookedProduct] = useState(null);
+  const [refresh,setRefresh] = useState(false);
+  const BuyNowContextValue = { bookedProduct, setbookedProduct,refresh,setRefresh };
   return (
     <BuyNowContextProvider.Provider value={BuyNowContextValue}>
       {children}

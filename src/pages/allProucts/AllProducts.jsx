@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Spiner from "../shared/spiner/Spiner";
 import AllProductCard from "./AllProductCard";
+import { BuyNowContextProvider } from "../../contexts/BuyNowContext";
 
 const AllProducts = () => {
+  const {refresh} = useContext(BuyNowContextProvider);
   const params = useParams();
-  const { data:allProducts=[], isLoading } = useQuery({
+  const { data:allProducts=[], isLoading } = useQuery([refresh],{
     queryKey: ["/products/catagorys/allProducts"],
     queryFn: async () => {
       const res = await fetch(
