@@ -66,6 +66,29 @@ const Header = () => {
             </ul>
           )}
         </div>
+        <div className="dropdown lg:hidden">
+          <label
+            onClick={toggleDropdown}
+            tabIndex={0}
+            className="btn btn-ghost"
+            htmlFor="dashboar-drawer"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
+            </svg>
+          </label>
+        </div>
         <Link
           to={"/"}
           className="btn btn-ghost normal-case text-xl hidden lg:block"
@@ -102,13 +125,7 @@ const Header = () => {
           {isOpen && (
             <ul className="menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
               <li>
-                <a className="justify-between">
-                  Profile
-                  <span className="badge">New</span>
-                </a>
-              </li>
-              <li>
-                <a>Settings</a>
+                <Link to={`/dashboard/user/profile`}>Dashboard</Link>
               </li>
               {user && user?.uid ? (
                 <button

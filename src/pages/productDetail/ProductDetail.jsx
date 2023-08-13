@@ -12,8 +12,10 @@ const ProductDetail = () => {
   // contexts
   const { user } = useContext(AuthContextProvider);
   const { setbookedProduct } = useContext(BuyNowContextProvider);
+  // params
   const params = useParams();
-  const { data: productDetail = [], isLoading } = useQuery({
+  // load product by id
+  const { data: productDetail = {}, isLoading } = useQuery({
     queryKey: ["/products/detail"],
     queryFn: async () => {
       const res = await fetch(

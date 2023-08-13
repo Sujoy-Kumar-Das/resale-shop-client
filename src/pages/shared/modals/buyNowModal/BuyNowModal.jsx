@@ -6,8 +6,9 @@ import { toast } from "react-hot-toast";
 const BuyNowModal = () => {
   // auth context
   const { user } = useContext(AuthContextProvider);
-  const { refresh, setRefresh } = useContext(BuyNowContextProvider);
-  const { bookedProduct, setbookedProduct } = useContext(BuyNowContextProvider);
+  const { bookedProduct, setbookedProduct, refresh } = useContext(
+    BuyNowContextProvider
+  );
   // states
   const [loading, setLoading] = useState(false);
   // handleBuyNowForm
@@ -39,10 +40,12 @@ const BuyNowModal = () => {
           toast.success(data.message);
           setLoading(false);
           setbookedProduct(null);
-          setRefresh(!refresh);
+          refresh();
         } else {
           toast.error(data.message);
           setLoading(false);
+          setbookedProduct(null);
+          refresh();
         }
       })
       .catch(() => {

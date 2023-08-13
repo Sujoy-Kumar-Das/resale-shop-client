@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Spiner from "../shared/spiner/Spiner";
@@ -6,9 +6,13 @@ import AllProductCard from "./AllProductCard";
 import { BuyNowContextProvider } from "../../contexts/BuyNowContext";
 
 const AllProducts = () => {
-  const {refresh} = useContext(BuyNowContextProvider);
+  const { setRefresh, refresh } = useContext(BuyNowContextProvider);
   const params = useParams();
-  const { data:allProducts=[], isLoading } = useQuery([refresh],{
+  const {
+    data: allProducts = [],
+    isLoading,
+    refetch,
+  } = useQuery([], {
     queryKey: ["/products/catagorys/allProducts"],
     queryFn: async () => {
       const res = await fetch(
@@ -18,13 +22,19 @@ const AllProducts = () => {
       if (data?.success) {
         return data?.products;
       } else {
-        return;
+        throw new Error("Failed to fetch products");
       }
     },
   });
+  // Set refetch funtion in setRefresh funtion
+  useEffect(() => {
+    setRefresh(() => refetch);
+  }, [refetch, setRefresh]);
+  // loading
   if (isLoading) {
     return <Spiner></Spiner>;
   }
+
   return (
     <section className=" mb-10 px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
       <header className="text-center">
@@ -37,7 +47,6 @@ const AllProducts = () => {
           <AllProductCard key={product._id} product={product}></AllProductCard>
         ))}
       </div>
-      
     </section>
   );
 };

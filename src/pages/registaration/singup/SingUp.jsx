@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { AuthContextProvider } from "../../../contexts/authContext/AuthContext";
 import { toast } from "react-hot-toast";
 import storeUserInfo from "../../../commonFuntions/StoreUserInfo";
+import { validateImage } from "../../../commonFuntions/ValidateImage";
 
 const SingUp = () => {
   // auth context
@@ -22,15 +23,7 @@ const SingUp = () => {
   const [loading, setLoading] = useState(false);
   // hooks
   const navigate = useNavigate();
-  // validate image file type
-  const validateImage = (file) => {
-    const allowedExtantions = ["image/png", "image/jpg", "image/jpeg"];
-    if (!allowedExtantions.includes(file[0].type)) {
-      return "File does not support. You must use .png or .jpg or jpeg";
-    } else {
-      return true;
-    }
-  };
+  
   // validate password validation
   const validatedPassword = (password) => {
     if (!password) {
@@ -165,7 +158,7 @@ const SingUp = () => {
               required: "Please Enter Your Name",
             })}
             type="text"
-            placeholder="Enter Your Password"
+            placeholder="Enter Your Name"
             className={`input w-full input-bordered ${
               errors?.name?.message && " input-error "
             }`}
