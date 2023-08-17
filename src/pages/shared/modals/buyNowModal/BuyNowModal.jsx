@@ -25,7 +25,7 @@ const BuyNowModal = () => {
       email,
       phone,
       address,
-      orderProductID: bookedProduct?._id,
+      orderedProduct: bookedProduct,
     };
     fetch(`http://localhost:5000/post-order?productId=${bookedProduct?._id}`, {
       method: "POST",

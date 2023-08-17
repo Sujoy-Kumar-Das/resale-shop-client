@@ -13,6 +13,7 @@ import DashboardLayout from "../../layouts/dashboardLayout/DashboardLayout";
 import UserProfile from "../../pages/userProfile/UserProfile";
 import MyAllProducts from "../../pages/myAllProducts/MyAllProducts";
 import EditMyProduct from "../../pages/editMyProduct/EditMyProduct";
+import MyOrders from "../../pages/myOrders/MyOrders";
 
 export const router = createBrowserRouter([
   {
@@ -29,46 +30,50 @@ export const router = createBrowserRouter([
         element: <AllProducts></AllProducts>,
       },
       {
-        path:"/products/detail/:id",
-        element:<ProductDetail></ProductDetail>
+        path: "/products/detail/:id",
+        element: <ProductDetail></ProductDetail>,
       },
     ],
   },
   {
-    path:'/registration',
-    element:<LoginLayout></LoginLayout>,
-    children:[
+    path: "/registration",
+    element: <LoginLayout></LoginLayout>,
+    children: [
       {
-        path:"/registration/login",
-        element:<Login></Login>
+        path: "/registration/login",
+        element: <Login></Login>,
       },
       {
-        path:"/registration/singup",
-        element:<SingUp></SingUp>
+        path: "/registration/singup",
+        element: <SingUp></SingUp>,
       },
       {
-        path:"/registration/reset-password",
-        element:<ResetPage></ResetPage>
-      }
-    ]
+        path: "/registration/reset-password",
+        element: <ResetPage></ResetPage>,
+      },
+    ],
   },
   {
-    path:"/dashboard",
-    element:<DashboardLayout></DashboardLayout>,
-    children:[
+    path: "/dashboard",
+    element: <DashboardLayout></DashboardLayout>,
+    children: [
       {
-        path:"/dashboard/user/profile",
-        element:<UserProfile></UserProfile>
+        path: "/dashboard/user/profile",
+        element: <UserProfile></UserProfile>,
       },
       {
-        path:"/dashboard/myAllProducts",
-        element:<MyAllProducts></MyAllProducts>
+        path: "/dashboard/myAllProducts",
+        element: <MyAllProducts></MyAllProducts>,
       },
       {
-        path:"/dashboard/edit/product/:id",
-        element:<EditMyProduct></EditMyProduct>
-      }
-    ]
+        path: "/dashboard/edit/product/:id",
+        element: <EditMyProduct></EditMyProduct>,
+      },
+      {
+        path: "/dashboard/myOrders",
+        element: <MyOrders></MyOrders>,
+      },
+    ],
   },
   { path: "*", element: <Error></Error> },
 ]);

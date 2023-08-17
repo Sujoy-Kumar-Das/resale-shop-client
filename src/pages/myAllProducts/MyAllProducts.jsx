@@ -4,10 +4,15 @@ import { AuthContextProvider } from "../../contexts/authContext/AuthContext";
 import Spiner from "../shared/spiner/Spiner";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
+import GenericModal from "../shared/modals/DeleteModal/DeleteModal";
+import DeleteModal from "../shared/modals/DeleteModal/DeleteModal";
 
 const MyAllProducts = () => {
   // constexts
   const { user, loading } = useContext(AuthContextProvider); // auth context
+  // states
+  const [deletedProduct, setdeletedProduct] = useState(null);
+  const [deleteLoader, setDeleteLoader] = useState(false);
   // load user data
   const {
     data = [],
@@ -20,6 +25,7 @@ const MyAllProducts = () => {
         `http://localhost:5000/myProducts?email=${user?.email}`
       );
       const data = await res.json();
+      // console.log(data);
       return data;
     },
   });
@@ -32,9 +38,46 @@ const MyAllProducts = () => {
     const data = await res.json();
     if (data.success) {
       toast.success(data.message);
+      refetch();
     } else {
       toast.error(data.message);
+      refetch();
     }
+  };
+  // handle delete
+  const handleDelete = async (id) => {
+    setDeleteLoader(true);
+    const res = await fetch(`http://localhost:5000/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    if (data.success) {
+      toast.success(data.message);
+      setDeleteLoader(false);
+      refetch();
+    } else {
+      toast.error(data.message);
+      setDeleteLoader(false);
+      refetch();
+    }
+  };
+
+  // cancelHander
+  const cancelHander = () => {
+    toast.success("You cancelled the deletion.", {
+      style: {
+        border: "1px solid #713200",
+        padding: "16px",
+        color: "#000000",
+      },
+      iconTheme: {
+        primary: "#5c6ac4",
+        secondary: "#ffff",
+      },
+    });
   };
   if (isLoading || loading) {
     return <Spiner></Spiner>;
@@ -66,26 +109,42 @@ const MyAllProducts = () => {
               <tr key={i} className=" hover">
                 <th>{i + 1}</th>
                 <td>
-                  {" "}
-                  <img
-                    src={product?.image}
-                    alt={`${product?.model} image`}
-                    className=" w-28"
-                  />{" "}
+                  {product?.orderedProduct ? (
+                    <img
+                      src={product?.orderedProduct?.image}
+                      alt={`${product?.model} image`}
+                      className=" w-28"
+                    />
+                  ) : (
+                    <img
+                      src={product?.image}
+                      alt={`${product?.model} image`}
+                      className=" w-28"
+                    />
+                  )}
                 </td>
-                <td>{product?.BrandName}</td>
-                <td>{product?.model}</td>
+                <td>
+                  {product?.orderedProduct
+                    ? product?.orderedProduct?.BrandName
+                    : product?.BrandName}
+                </td>
+
+                <td>
+                  {product?.orderedProduct
+                    ? product?.orderedProduct?.model
+                    : product?.model}
+                </td>
                 <td>{product?.booked ? "Booked" : "Not Booked"}</td>
                 <td>
                   {product?.booked ? (
                     <>
                       {product.completed ? (
-                        <button className=" btn btn-disabled btn-xs">
+                        <button className=" btn btn-disabled btn-xs rounded px-3 py-1">
                           Completed
                         </button>
                       ) : (
                         <button
-                          className="  btn btn-accent btn-xs"
+                          className="  btn btn-accent btn-xs rounded px-3 py-1"
                           onClick={() => {
                             handleOrderComplete(product?._id);
                           }}
@@ -97,13 +156,19 @@ const MyAllProducts = () => {
                   ) : (
                     <>
                       <Link
-                        className=" btn btn-accent btn-xs me-2"
+                        className=" btn btn-accent btn-xs rounded px-3 py-1 me-2"
                         to={`/dashboard/edit/product/${product._id}`}
                       >
                         Edit
                       </Link>
                       <span>OR</span>{" "}
-                      <button className=" btn btn-error btn-xs ms-2">
+                      <button
+                        onClick={() => {
+                          window.delete_modal.showModal();
+                          setdeletedProduct(product);
+                        }}
+                        className=" btn btn-error btn-xs ms-2 rounded px-3 py-1"
+                      >
                         Delete
                       </button>
                     </>
@@ -114,6 +179,13 @@ const MyAllProducts = () => {
           </tbody>
         </table>
       </div>
+      <DeleteModal
+        product={deletedProduct}
+        deleteHandeler={handleDelete}
+        deleteLoader={deleteLoader}
+        closeHandeler={cancelHander}
+        text={`Are You Sure ? You want't to delete ${deletedProduct?.model}`}
+      ></DeleteModal>
     </div>
   );
 };

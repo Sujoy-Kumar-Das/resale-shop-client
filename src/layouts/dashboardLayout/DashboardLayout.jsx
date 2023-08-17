@@ -1,4 +1,4 @@
-import React from "react";
+import React  from "react";
 import Header from "../../pages/shared/header/Header";
 import { Link, Outlet } from "react-router-dom";
 
@@ -21,7 +21,7 @@ const DashboardLayout = () => {
               <Link to={"/dashboard/myAllProducts"}>My All Products</Link>
             </li>
             <li>
-              <Link to={"/dashboard/myAllProducts"}>My Orders</Link>
+              <Link to={`/dashboard/myOrders`}>My Orders</Link>
             </li>
             <li>
               <Link to={"/dashboard/myAllProducts"}>Upload Product</Link>

@@ -153,11 +153,11 @@ const UserProfile = () => {
                 {userData?.user?.verified === true ? (
                   "Verified"
                 ) : userData?.user?.verified === "requested" ? (
-                  <button className=" btn btn-disabled btn-xs">Pending</button>
+                  <button className=" btn btn-disabled btn-xs rounded px-3 py-1">Pending</button>
                 ) : (
                   <button
                     onClick={handleVerify}
-                    className=" btn btn-accent btn-xs"
+                    className=" btn btn-accent btn-xs rounded px-3 py-1"
                   >
                     {loader ? (
                       <span className=" loading loading-spinner loading-xs"></span>
@@ -180,7 +180,7 @@ const UserProfile = () => {
                 <td>
                   <button
                     onClick={handeChangeRoleSeller}
-                    className=" btn btn-accent btn-xs me-2"
+                    className=" btn btn-accent btn-xs me-2 rounded px-3 py-1"
                   >
                     {loader ? (
                       <span className=" loading loading-spinner loading-xs"></span>
@@ -191,7 +191,7 @@ const UserProfile = () => {
                   <span>OR</span>
                   <button
                     onClick={handleChangeRoleBoth}
-                    className=" btn btn-info btn-xs ms-2"
+                    className=" btn btn-info btn-xs ms-2 rounded px-3 py-1"
                   >
                     {bothLoader ? (
                       <span className=" loading loading-spinner loading-xs"></span>
@@ -208,7 +208,7 @@ const UserProfile = () => {
                 <td>
                   <button
                     onClick={handleChangeRoleSeller}
-                    className=" btn btn-accent btn-xs me-2"
+                    className=" btn btn-accent btn-xs me-2 rounded px-3 py-1"
                   >
                     {loader ? (
                       <span className=" loading loading-spinner loading-xs"></span>
@@ -219,7 +219,7 @@ const UserProfile = () => {
                   <span>OR</span>
                   <button
                     onClick={handleChangeRoleBoth}
-                    className=" btn btn-info btn-xs ms-2"
+                    className=" btn btn-info btn-xs ms-2 rounded px-3 py-1"
                   >
                     {bothLoader ? (
                       <span className=" loader loading-spinner loading-xs"></span>
@@ -234,7 +234,7 @@ const UserProfile = () => {
                 <th></th>
                 <th>Apply For</th>
                 <td>
-                  <button className=" btn btn-xs btn-disabled">Both</button>
+                  <button className=" btn btn-xs btn-disabled rounded px-3 py-1" >Both</button>
                 </td>
               </tr>
             )}

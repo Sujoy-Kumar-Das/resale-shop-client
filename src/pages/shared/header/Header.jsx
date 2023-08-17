@@ -130,7 +130,7 @@ const Header = () => {
               {user && user?.uid ? (
                 <button
                   onClick={handleSingout}
-                  className=" btn btn-xs btn-info"
+                  className=" btn btn-xs btn-info rounded px-3 py-1"
                 >
                   Singout
                 </button>
