@@ -7,6 +7,10 @@ import { Link } from "react-router-dom";
 import ViewProductModal from "../shared/modals/viewProductModal/ViewProductModal";
 import ShiftModal from "../shared/modals/shiftModal/ShiftModal";
 import DeleteModal from "../shared/modals/DeleteModal/DeleteModal";
+import CheckoutModal from "../payment/CheckoutModal";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+const stripePromise = loadStripe(import.meta.env.VITE_REACT_APP_PK_Stripe);
 const MyOrders = () => {
   // auth context
   const { user, loading } = useContext(AuthContextProvider);
@@ -14,7 +18,7 @@ const MyOrders = () => {
   // states
   const [orderedData, setOrderedData] = useState(null);
   const [canceledProduct, setCanceledProduct] = useState(null);
-  const [cancelLoader, setCanceledLoader] = useState(false);
+  const [paymentProduct, setPaymentProduct] = useState(null);
   // load ordered products
   const {
     data = [],
@@ -54,7 +58,9 @@ const MyOrders = () => {
       refetch();
     }
   };
+  // loaded data
   const { success, orders, message } = data;
+
   if (loading || isLoading) {
     return <Spiner></Spiner>;
   }
@@ -106,9 +112,15 @@ const MyOrders = () => {
                       Shifted
                     </button>
                   ) : (
-                    <button className="btn btn-primary btn-xs  rounded px-3 py-1">
-                      Pay Now
-                    </button>
+                    <label
+                      onClick={() => {
+                        setPaymentProduct(order);
+                      }}
+                      htmlFor="payment_modal"
+                      className=" btn btn-primary btn-xs rounded px-3 py-1"
+                    >
+                       Pay Now
+                    </label>
                   )}
                   {/* {console.log(order)} */}
                 </td>
@@ -155,6 +167,14 @@ const MyOrders = () => {
       ></DeleteModal>
       <ShiftModal></ShiftModal>
       <ViewProductModal orderedData={orderedData}></ViewProductModal>
+      {paymentProduct && (
+        <Elements stripe={stripePromise}>
+          <CheckoutModal
+            setPaymentProduct={setPaymentProduct}
+            product={paymentProduct}
+          ></CheckoutModal>
+        </Elements>
+      )}
     </div>
   );
 };
