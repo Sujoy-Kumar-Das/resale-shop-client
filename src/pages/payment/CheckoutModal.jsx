@@ -14,7 +14,7 @@ const CheckoutModal = ({ product, setPaymentProduct }) => {
   const { data: clientSecret } = useQuery(
     [product?.orderedProduct?.resale_price],
     {
-      queryKey: [],
+      queryKey: ["/create-payment-intent"],
       queryFn: async () => {
         const res = await fetch("http://localhost:5000/create-payment-intent", {
           method: "POST",
