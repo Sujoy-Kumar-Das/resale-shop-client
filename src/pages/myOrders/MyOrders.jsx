@@ -101,6 +101,7 @@ const MyOrders = () => {
                 </td>
                 <td>{order?.orderedProduct?.BrandName}</td>
                 <td>{order?.orderedProduct?.model}</td>
+                {console.log(order)}
                 <td>
                   {order?.completed ? (
                     <button
@@ -111,6 +112,10 @@ const MyOrders = () => {
                     >
                       Shifted
                     </button>
+                  ) : order?.payment === "paid" ? (
+                    <button className=" btn btn-disabled btn-xs rounded px-3 py-1">
+                      Paid
+                    </button>
                   ) : (
                     <label
                       onClick={() => {
@@ -119,7 +124,7 @@ const MyOrders = () => {
                       htmlFor="payment_modal"
                       className=" btn btn-primary btn-xs rounded px-3 py-1"
                     >
-                       Pay Now
+                      Pay Now
                     </label>
                   )}
                   {/* {console.log(order)} */}
@@ -137,7 +142,7 @@ const MyOrders = () => {
                 </td>
                 <td>
                   {" "}
-                  {order?.completed ? (
+                  {order?.payment === "paid" ? (
                     <Link to={"/products/catagorys"}>
                       <button className=" btn btn-primary btn-sm rounded px-3 py-1">
                         Shop more

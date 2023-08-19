@@ -1,28 +1,112 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { AuthContextProvider } from "../../contexts/authContext/AuthContext";
+import { validateImage } from "../../commonFuntions/ValidateImage";
+import Spiner from "../shared/spiner/Spiner";
+import uploadImage from "../../commonFuntions/UploadImage";
+import { toast } from "react-hot-toast";
 
 const UploadProduct = () => {
+  const { user, loading } = useContext(AuthContextProvider);
+  // states
+  const [loader, setLoader] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const handleUpload = async (data) => {
+    setLoader(true);
+    const brandName = data.BrandName;
+    const productImage = data.image;
+    const uploadedData = {
+      catagory_Id:
+        brandName === "Apple"
+          ? "646da86c90217363302bd341"
+          : brandName === "Acer"
+          ? "646da86c90217363302bd346"
+          : brandName === "ASUS"
+          ? "646da86c90217363302bd345"
+          : brandName === "HP"
+          ? "646da86c90217363302bd343"
+          : brandName === "Lenovo"
+          ? "646da86c90217363302bd344"
+          : brandName === "Dell"
+          ? "646da86c90217363302bd342"
+          : "",
+      BrandName: data.BrandName,
+      model: data.model,
+      image: await uploadImage(productImage, errors),
+      condition: data.condition,
+      original_price: data.original_price,
+      resale_price: data.resale_price,
+      buying_year: data.buying_year,
+      description: data.description,
+      seller: {
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        address: data.address,
+        image: user.photoURL,
+      },
+      specification: {
+        Processor: data.Processor,
+        RAM: data.RAM,
+        Storage: data.Storage,
+        Display: data.display,
+        Graphics: data.Graphics,
+      },
+    };
+    const res = await fetch("http://localhost:5000/upload-product", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(uploadedData),
+    });
+    const uploadedResult = await res.json();
+    if (uploadedResult.success) {
+      toast.success(uploadedResult.message);
+      setLoader(false);
+      reset();
+    } else {
+      toast.error(uploadedResult.message);
+      setLoader(false);
+    }
+  };
+  if (loading) {
+    return <Spiner></Spiner>;
+  }
   return (
-    <div className="w-full lg:w-4/5 mx-auto">
-      <h1 className=" text-2xl text-center mb-5">Edit Laptop Detail</h1>
-      <form onSubmit={handleSubmit(handleEdit)}>
-        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-x-3">
-          <div className="form-control w-full ">
+    <div className="w-full lg:w-4/5 mx-auto ">
+      <h1 className=" text-2xl text-center mb-5">Uplaod a Laptop</h1>
+      <form onSubmit={handleSubmit(handleUpload)}>
+        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="form-control w-full">
             <label className="label">
               <span className="label-text">BrandName</span>
             </label>
-            <input
+            <select
               {...register("BrandName", {
-                required: "Please Enter Your Products BrandName",
+                required: "Please Select Products BrandName",
               })}
-              type="text"
+              type="select"
               placeholder="Enter Your Products BrandName"
-              defaultValue={productDetail?.BrandName}
-              className={`input w-full input-bordered ${
+              className={`select select-bordered w-full  ${
                 errors?.BrandName?.message && " input-error "
               }`}
-            />
-            {errors?.BrandName && (
-              <p className=" text-error mt-1">{errors?.BrandName?.message}</p>
+            >
+              <option value={""} selected disabled>
+                Select Brand Name{" "}
+              </option>
+              <option value={"Apple"}>Apple</option>
+              <option value={"ASUS"}>Asus</option>
+              <option value={"Acer"}>Acer</option>
+              <option value={"Dell"}>Dell</option>
+              <option value={"HP"}>HP</option>
+              <option value="Lenovo">Lenovo</option>
+            </select>
+            {errors.BrandName?.message && (
+              <p className=" text-error mt-1">{errors.BrandName?.message}</p>
             )}
           </div>
           <div className="form-control w-full ">
@@ -35,7 +119,6 @@ const UploadProduct = () => {
               })}
               type="text"
               placeholder="Enter Your Products Model Name"
-              defaultValue={productDetail?.model}
               className={`input w-full input-bordered ${
                 errors?.model?.message && " input-error "
               }`}
@@ -44,8 +127,6 @@ const UploadProduct = () => {
               <p className=" text-error mt-1">{errors?.model?.message}</p>
             )}
           </div>
-        </div>
-        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-x-3">
           <div className="form-control w-full ">
             <label className="label">
               <span className="label-text">Condition</span>
@@ -56,7 +137,6 @@ const UploadProduct = () => {
               })}
               type="text"
               placeholder="Please Enter How Is Your Laptop Condition"
-              defaultValue={productDetail?.condition}
               className={`input w-full input-bordered ${
                 errors?.condition?.message && " input-error "
               }`}
@@ -74,9 +154,7 @@ const UploadProduct = () => {
                 required: "Please Enter When Did You Buy.",
               })}
               type="text"
-              readOnly
               placeholder="Please Enter when Did You Buy."
-              defaultValue={productDetail?.buying_year}
               className={`input w-full input-bordered ${
                 errors?.buying_year?.message && " input-error "
               }`}
@@ -85,8 +163,6 @@ const UploadProduct = () => {
               <p className=" text-error mt-1">{errors?.buying_year?.message}</p>
             )}
           </div>
-        </div>
-        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-x-3">
           <div className="form-control w-full ">
             <label className="label">
               <span className="label-text">Original Price</span>
@@ -97,7 +173,6 @@ const UploadProduct = () => {
               })}
               type="text"
               placeholder="Please Enter Your Laptops Original Price."
-              defaultValue={productDetail?.original_price}
               className={`input w-full input-bordered ${
                 errors?.original_price?.message && " input-error "
               }`}
@@ -118,7 +193,6 @@ const UploadProduct = () => {
               })}
               type="text"
               placeholder="Please Enter How Much Do You Want To Sell."
-              defaultValue={productDetail?.resale_price}
               className={`input w-full input-bordered ${
                 errors?.resale_price?.message && " input-error "
               }`}
@@ -129,27 +203,22 @@ const UploadProduct = () => {
               </p>
             )}
           </div>
-        </div>
-        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-x-3">
           <div className="form-control w-full ">
             <label className="label">
               <span className="label-text">Display</span>
             </label>
             <input
-              {...register("Display", {
+              {...register("display", {
                 required: "Please Enter What Is The Size Of The Display.",
               })}
               type="text"
               placeholder="Please Enter What Is The Size Of The Display."
-              defaultValue={productDetail?.specification?.Display}
               className={`input w-full input-bordered ${
-                errors?.specification?.Display?.message && " input-error "
+                errors?.display?.message && " input-error "
               }`}
             />
-            {errors?.specification?.Display && (
-              <p className=" text-error mt-1">
-                {errors?.specification?.Display?.message}
-              </p>
+            {errors?.display?.message && (
+              <p className=" text-error mt-1">{errors?.display?.message}</p>
             )}
           </div>
           <div className="form-control w-full ">
@@ -162,19 +231,14 @@ const UploadProduct = () => {
               })}
               type="text"
               placeholder="Please Enter Your Graphics Card Configaration."
-              defaultValue={productDetail?.specification?.Graphics}
               className={`input w-full input-bordered ${
-                errors?.specification?.Graphics?.message && " input-error "
+                errors?.Graphics?.message && " input-error "
               }`}
             />
-            {errors?.specification?.Graphics && (
-              <p className=" text-error mt-1">
-                {errors?.specification?.Graphics?.message}
-              </p>
+            {errors?.Graphics?.message && (
+              <p className=" text-error mt-1">{errors?.Graphics?.message}</p>
             )}
           </div>
-        </div>
-        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-x-3">
           <div className="form-control w-full ">
             <label className="label">
               <span className="label-text">Processor</span>
@@ -185,15 +249,12 @@ const UploadProduct = () => {
               })}
               type="text"
               placeholder="Please Enter What Is Your Processor."
-              defaultValue={productDetail?.specification?.Processor}
               className={`input w-full input-bordered ${
-                errors?.specification?.Processor?.message && " input-error "
+                errors?.Processor?.message && " input-error "
               }`}
             />
-            {errors?.specification?.Processor && (
-              <p className=" text-error mt-1">
-                {errors?.specification?.Processor?.message}
-              </p>
+            {errors?.Processor?.message && (
+              <p className=" text-error mt-1">{errors?.Processor?.message}</p>
             )}
           </div>
           <div className="form-control w-full ">
@@ -206,38 +267,31 @@ const UploadProduct = () => {
               })}
               type="text"
               placeholder="Please Enter Your RAM Size."
-              defaultValue={productDetail?.specification?.RAM}
               className={`input w-full input-bordered ${
-                errors?.specification?.RAM?.message && " input-error "
+                errors?.RAM?.message && " input-error "
               }`}
             />
-            {errors?.specification?.RAM && (
-              <p className=" text-error mt-1">
-                {errors?.specification?.RAM?.message}
-              </p>
+            {errors?.RAM?.message && (
+              <p className=" text-error mt-1">{errors?.RAM?.message}</p>
             )}
           </div>
-        </div>
-        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-x-3">
           <div className="form-control w-full ">
             <label className="label">
-              <span className="label-text">Storage</span>
+              <span className="label-text">Description</span>
             </label>
             <input
-              {...register("Storage", {
-                required: "Please Enter What Is Your Processor.",
+              {...register("description", {
+                required:
+                  "Please Enter A Description. Why you like to sell this product.",
               })}
               type="text"
-              placeholder="Please Enter What Is Your Processor."
-              defaultValue={productDetail?.specification?.Storage}
+              placeholder="Please Enter Your Description"
               className={`input w-full input-bordered ${
-                errors?.specification?.Storage?.message && " input-error "
+                errors?.description?.message && " input-error "
               }`}
             />
-            {errors?.specification?.Storage && (
-              <p className=" text-error mt-1">
-                {errors?.specification?.Storage?.message}
-              </p>
+            {errors?.description?.message && (
+              <p className=" text-error mt-1">{errors?.description?.message}</p>
             )}
           </div>
           <div className="form-control w-full ">
@@ -259,27 +313,22 @@ const UploadProduct = () => {
               <p className=" text-error mt-1">{errors?.image?.message}</p>
             )}
           </div>
-        </div>
-        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-x-3">
           <div className="form-control w-full ">
             <label className="label">
               <span className="label-text">Storage</span>
             </label>
             <input
               {...register("Storage", {
-                required: "Please Enter What Is Your Processor.",
+                required: "Please Enter What Is Your Storage Size.",
               })}
               type="text"
-              placeholder="Please Enter What Is Your Processor."
-              defaultValue={productDetail?.specification?.Storage}
+              placeholder="Please Enter Your Storage."
               className={`input w-full input-bordered ${
-                errors?.specification?.Storage?.message && " input-error "
+                errors?.Storage?.message && " input-error "
               }`}
             />
-            {errors?.specification?.Storage && (
-              <p className=" text-error mt-1">
-                {errors?.specification?.Storage?.message}
-              </p>
+            {errors?.Storage?.message && (
+              <p className=" text-error mt-1">{errors?.Storage?.message}</p>
             )}
           </div>
           <div className="form-control w-full ">
@@ -302,8 +351,6 @@ const UploadProduct = () => {
               <p className=" text-error mt-1">{errors?.sellerImage?.message}</p>
             )}
           </div>
-        </div>
-        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-x-3">
           <div className="form-control w-full ">
             <label className="label">
               <span className="label-text">Name</span>
@@ -313,17 +360,15 @@ const UploadProduct = () => {
                 required: "Please Enter Your Name.",
               })}
               type="text"
-              readOnly
+              value={user?.displayName}
+              defaultValue={user?.displayName}
               placeholder="Please Enter Your Name."
-              defaultValue={productDetail?.seller?.name}
               className={`input w-full input-bordered ${
-                errors?.seller?.name?.message && " input-error "
+                errors?.name?.message && " input-error "
               }`}
             />
-            {errors?.seller?.name && (
-              <p className=" text-error mt-1">
-                {errors?.seller?.name?.message}
-              </p>
+            {errors?.name?.message && (
+              <p className=" text-error mt-1">{errors?.name?.message}</p>
             )}
           </div>
           <div className="form-control w-full ">
@@ -336,19 +381,14 @@ const UploadProduct = () => {
               })}
               type="address"
               placeholder="Please Enter Your Address"
-              defaultValue={productDetail?.seller?.address}
               className={`input w-full input-bordered ${
-                errors?.seller?.address?.message && " input-error "
+                errors?.address?.message && " input-error "
               }`}
             />
-            {errors?.seller?.address && (
-              <p className=" text-error mt-1">
-                {errors?.seller?.address?.message}
-              </p>
+            {errors?.address?.message && (
+              <p className=" text-error mt-1">{errors?.address?.message}</p>
             )}
           </div>
-        </div>
-        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-x-3">
           <div className="form-control w-full ">
             <label className="label">
               <span className="label-text">Email</span>
@@ -358,17 +398,16 @@ const UploadProduct = () => {
                 required: "Please Enter Your Email.",
               })}
               type="email"
-              readOnly
               placeholder="Please Enter Your Email."
-              defaultValue={productDetail?.seller?.email}
+              readOnly
+              defaultValue={user?.email}
+              value={user?.email}
               className={`input w-full input-bordered ${
-                errors?.seller?.email?.message && " input-error "
+                errors?.email?.message && " input-error "
               }`}
             />
-            {errors?.seller?.email && (
-              <p className=" text-error mt-1">
-                {errors?.seller?.email?.message}
-              </p>
+            {errors?.email?.message && (
+              <p className=" text-error mt-1">{errors?.email?.message}</p>
             )}
           </div>
           <div className="form-control w-full ">
@@ -381,20 +420,24 @@ const UploadProduct = () => {
               })}
               type="phone"
               placeholder="Please Enter Your Mobile Number"
-              defaultValue={productDetail?.seller?.phone}
               className={`input w-full input-bordered ${
-                errors?.seller?.phone?.message && " input-error "
+                errors?.phone?.message && " input-error "
               }`}
             />
-            {errors?.seller?.phone && (
-              <p className=" text-error mt-1">
-                {errors?.seller?.phone?.message}
-              </p>
+            {errors?.phone?.message && (
+              <p className=" text-error mt-1">{errors?.phone?.message}</p>
             )}
           </div>
         </div>
+
         <div className="flex justify-center mt-5">
-          <button className=" btn btn-accent">Save Changes</button>
+          <button className=" btn btn-accent w-80 mb-5">
+            {loader ? (
+              <span className=" loading loading-spinner loading-xs"></span>
+            ) : (
+              "Upload Product"
+            )}
+          </button>
         </div>
       </form>
     </div>

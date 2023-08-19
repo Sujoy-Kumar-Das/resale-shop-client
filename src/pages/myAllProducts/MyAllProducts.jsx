@@ -25,11 +25,11 @@ const MyAllProducts = () => {
         `http://localhost:5000/myProducts?email=${user?.email}`
       );
       const data = await res.json();
-      // console.log(data);
       return data;
     },
   });
   const { success, message, products } = data;
+  // console.log(data)
   //   handle order complete
   const handleOrderComplete = async (id) => {
     const res = await fetch(`http://localhost:5000/completeOrder?id=${id}`, {
@@ -84,7 +84,7 @@ const MyAllProducts = () => {
   }
   if (!success) {
     return (
-      <div className=" text-center text-2xl text-error">
+      <div className=" text-center text-4xl text-error">
         <h1>{message}</h1>
       </div>
     );
@@ -101,6 +101,7 @@ const MyAllProducts = () => {
               <th>Brand</th>
               <th>Model</th>
               <th>Status</th>
+              <th>Paid</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -135,7 +136,9 @@ const MyAllProducts = () => {
                     : product?.model}
                 </td>
                 <td>{product?.booked ? "Booked" : "Not Booked"}</td>
+                <td>{product?.payment ? "Paid" : "Not Paid"}</td>
                 <td>
+                  {console.log(product)}
                   {product?.booked ? (
                     <>
                       {product.completed ? (

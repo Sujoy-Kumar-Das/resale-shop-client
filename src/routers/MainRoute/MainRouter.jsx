@@ -15,6 +15,7 @@ import MyAllProducts from "../../pages/myAllProducts/MyAllProducts";
 import EditMyProduct from "../../pages/editMyProduct/EditMyProduct";
 import MyOrders from "../../pages/myOrders/MyOrders";
 import AllUsers from "../../pages/allUsers/AllUsers";
+import UploadProduct from "../../pages/uploadProduct/UploadProduct";
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/myOrders",
         element: <MyOrders></MyOrders>,
+      },
+      {
+        path: "/dashboard/upload-product",
+        element: <UploadProduct></UploadProduct>,
       },
       {
         path: "/dashboard/all-users",
