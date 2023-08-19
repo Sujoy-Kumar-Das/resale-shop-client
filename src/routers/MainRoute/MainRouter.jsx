@@ -17,6 +17,7 @@ import MyOrders from "../../pages/myOrders/MyOrders";
 import AllUsers from "../../pages/allUsers/AllUsers";
 import UploadProduct from "../../pages/uploadProduct/UploadProduct";
 import PrivetRouter from "../privetRouter/PrivetRouter";
+import AdminRouter from "../adminRouter/AdminRouter";
 
 export const router = createBrowserRouter([
   {
@@ -86,7 +87,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/all-users",
-        element: <AllUsers></AllUsers>,
+        element: (
+          <AdminRouter>
+            <AllUsers></AllUsers>
+          </AdminRouter>
+        ),
       },
     ],
   },
