@@ -16,6 +16,7 @@ import EditMyProduct from "../../pages/editMyProduct/EditMyProduct";
 import MyOrders from "../../pages/myOrders/MyOrders";
 import AllUsers from "../../pages/allUsers/AllUsers";
 import UploadProduct from "../../pages/uploadProduct/UploadProduct";
+import PrivetRouter from "../privetRouter/PrivetRouter";
 
 export const router = createBrowserRouter([
   {
@@ -57,7 +58,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout></DashboardLayout>,
+    element: (
+      <PrivetRouter>
+        <DashboardLayout></DashboardLayout>
+      </PrivetRouter>
+    ),
     children: [
       {
         path: "/dashboard/user/profile",

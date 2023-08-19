@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Social from "../social/Social";
 import { AuthContextProvider } from "../../../contexts/authContext/AuthContext";
 import { toast } from "react-hot-toast";
@@ -18,6 +18,10 @@ const Login = () => {
   // states
   const [loading, setLoading] = useState(false);
   const [firebaseError, setFirebaseError] = useState(" ");
+  // hooks
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const navigate = useNavigate();
   // handle login
   const handleLogin = (data) => {
     setLoading(true);
@@ -27,13 +31,14 @@ const Login = () => {
     loginWithEmailAndPass(email, password)
       .then((result) => {
         const user = result.user;
-        toast.success(`${user?.displayName} Logged in succesfully`)
+        toast.success(`${user?.displayName} Logged in succesfully`);
         reset();
         setLoading(false);
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         setFirebaseError(error.message);
-        setLoading(false)
+        setLoading(false);
       });
   };
   return (

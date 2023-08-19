@@ -68,27 +68,6 @@ const SingUp = () => {
     }
   };
 
-  // upload image
-  // const uploadImage = async (image) => {
-  //   const imageFile = image[0];
-  //   const formData = new FormData();
-  //   formData.append("image", imageFile);
-  //   const res = await fetch(
-  //     `https://api.imgbb.com/1/upload?key=${
-  //       import.meta.env.VITE_REACT_APP_imgApi_key
-  //     }`,
-  //     {
-  //       method: "POST",
-  //       body: formData,
-  //     }
-  //   );
-  //   const imageData = await res.json();
-  //   if (imageData.success) {
-  //     return imageData.data.display_url;
-  //   } else {
-  //     toast.error(`${errors?.image?.message}`);
-  //   }
-  // };
   // update user
   const updateUserProfile = async (name, image, email, role) => {
     const imageURL = await uploadImage(image,errors);

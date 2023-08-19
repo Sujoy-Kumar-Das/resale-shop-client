@@ -22,7 +22,7 @@ const AuthContext = ({ children }) => {
   const githubProvider = new GithubAuthProvider();
   // states
   const [user,setUser] = useState(null);
-  const [loading,setLoading] = useState(false)
+  const [loading,setLoading] = useState(true)
   // google singUp
   const singUpWithGoogle = () => {
     setLoading(true);
