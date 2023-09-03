@@ -17,4 +17,3 @@
 * user can verify themsleve.
 * only buyers can upload a product.
 * buyer can edit and delete his/her product.
-* 
