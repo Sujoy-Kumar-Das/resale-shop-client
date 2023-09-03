@@ -1,10 +1,12 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useQuery } from "react-query";
 import Spiner from "../shared/spiner/Spiner";
+import { AuthContextProvider } from "../../contexts/authContext/AuthContext";
 
 const CheckoutModal = ({ product, setPaymentProduct }) => {
+  const { user } = useContext(AuthContextProvider);
   const stripe = useStripe();
   const elements = useElements();
   const [paymentError, setPaymentError] = useState(" ");
@@ -16,13 +18,19 @@ const CheckoutModal = ({ product, setPaymentProduct }) => {
     {
       queryKey: ["/create-payment-intent"],
       queryFn: async () => {
-        const res = await fetch("http://localhost:5000/create-payment-intent", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            price: product?.orderedProduct?.resale_price,
-          }),
-        });
+        const res = await fetch(
+          `https://resell-shop-server-sujoy-kumar-das.vercel.app/create-payment-intent?email=${user?.email}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+            },
+            body: JSON.stringify({
+              price: product?.orderedProduct?.resale_price,
+            }),
+          }
+        );
         const data = await res.json();
         if (data.success) {
           return data.clientSecret;
@@ -76,10 +84,13 @@ const CheckoutModal = ({ product, setPaymentProduct }) => {
       };
       if (paymentIntent.status === "succeeded") {
         const res = await fetch(
-          `http://localhost:5000/store-payment-info/${product?._id}`,
+          `https://resell-shop-server-sujoy-kumar-das.vercel.app/store-payment-info/${product?._id}?email=${user?.email}`,
           {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+            },
             body: JSON.stringify(paymentInfo),
           }
         );

@@ -19,7 +19,7 @@ const ProductDetail = () => {
     queryKey: ["/products/detail"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/products/detail/${params.id}`
+        `https://resell-shop-server-sujoy-kumar-das.vercel.app/products/detail/${params.id}`
       );
       const data = await res.json();
       if (data.success) {

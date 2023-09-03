@@ -2,11 +2,12 @@ import { toast } from "react-hot-toast";
 
 const storeUserInfo = async (userInfo) => {
   const res = fetch(
-    `http://localhost:5000/store/user/info?email=${userInfo.email}`,
+    `https://resell-shop-server-sujoy-kumar-das.vercel.app/store/user/info?email=${userInfo.email}`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
       },
       body: JSON.stringify(userInfo),
     }

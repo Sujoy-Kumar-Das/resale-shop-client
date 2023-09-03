@@ -22,19 +22,32 @@ const MyAllProducts = () => {
     queryKey: ["/myProducts"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/myProducts?email=${user?.email}`
+        `https://resell-shop-server-sujoy-kumar-das.vercel.app/myProducts?email=${user?.email}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+          },
+        }
       );
       const data = await res.json();
       return data;
     },
   });
   const { success, message, products } = data;
-  // console.log(data)
+
   //   handle order complete
   const handleOrderComplete = async (id) => {
-    const res = await fetch(`http://localhost:5000/completeOrder?id=${id}`, {
-      method: "PATCH",
-    });
+    const res = await fetch(
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/completeOrder/id=${id}?email=${user.email}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
+      }
+    );
     const data = await res.json();
     if (data.success) {
       toast.success(data.message);
@@ -47,12 +60,16 @@ const MyAllProducts = () => {
   // handle delete
   const handleDelete = async (id) => {
     setDeleteLoader(true);
-    const res = await fetch(`http://localhost:5000/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/delete/${id}?email=${user?.email}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
+      }
+    );
     const data = await res.json();
     if (data.success) {
       toast.success(data.message);

@@ -27,13 +27,17 @@ const BuyNowModal = () => {
       address,
       orderedProduct: bookedProduct,
     };
-    fetch(`http://localhost:5000/post-order?productId=${bookedProduct?._id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(orderData),
-    })
+    fetch(
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/post-order?productId=${bookedProduct?._id}&email=${user?.email}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
+        body: JSON.stringify(orderData),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {

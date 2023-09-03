@@ -3,7 +3,6 @@ import { useQuery } from "react-query";
 import Spiner from "../../../shared/spiner/Spiner";
 import ProductCard from "../../../shared/productCard/ProductCard";
 
-
 const Products = () => {
   let limit = 3;
   const {
@@ -14,7 +13,7 @@ const Products = () => {
     queryKey: ["products/catagorys"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/products/catagorys?view=${limit}`
+        `https://resell-shop-server-sujoy-kumar-das.vercel.app/products/catagorys?view=${limit}`
       );
       const data = await res.json();
       if (data.success) {
@@ -47,7 +46,9 @@ const Products = () => {
       <div className=" flex justify-center mt-8">
         <button
           onClick={handleViewAllProducts}
-          className={`btn btn-primary ${products?.length === data?.count && " hidden" } }`}
+          className={`btn btn-primary ${
+            products?.length === data?.count && " hidden"
+          } }`}
         >
           Show all{" "}
         </button>

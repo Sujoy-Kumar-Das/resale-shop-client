@@ -5,7 +5,14 @@ const useAdmin = (email) => {
   const [adminLoading, setAdminLoading] = useState(true);
   useEffect(() => {
     if (email) {
-      fetch(`http://localhost:5000/user/admin/${email}`)
+      fetch(
+        `https://resell-shop-server-sujoy-kumar-das.vercel.app/user/admin/${email}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+          },
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           setIsAdmin(data.success);
@@ -13,7 +20,7 @@ const useAdmin = (email) => {
         });
     }
   }, [email]);
-  return [isAdmin,adminLoading]
+  return [isAdmin, adminLoading];
 };
 
 export default useAdmin;

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { AuthContextProvider } from "../../../contexts/authContext/AuthContext";
 import { toast } from "react-hot-toast";
 import storeUserInfo from "../../../commonFuntions/StoreUserInfo";
+import getJwtToken from "../../../commonFuntions/getJwt";
 
 const Social = ({ children }) => {
   // auth context
@@ -20,6 +21,7 @@ const Social = ({ children }) => {
           role: "buyer",
         };
         storeUserInfo(userData);
+        getJwtToken(user.email);
       })
       .catch((error) => console.log(error));
   };
@@ -29,7 +31,6 @@ const Social = ({ children }) => {
       .then((result) => {
         const user = result.user;
         toast.success(`Wellcome ${user?.displayName} in our family`);
-        console.log(user)
       })
       .catch((error) => console.log(error));
   };

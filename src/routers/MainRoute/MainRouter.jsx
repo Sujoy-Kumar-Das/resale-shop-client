@@ -18,6 +18,7 @@ import AllUsers from "../../pages/allUsers/AllUsers";
 import UploadProduct from "../../pages/uploadProduct/UploadProduct";
 import PrivetRouter from "../privetRouter/PrivetRouter";
 import AdminRouter from "../adminRouter/AdminRouter";
+import About from "../../pages/about/About";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: "/products/detail/:id",
         element: <ProductDetail></ProductDetail>,
+      },
+      {
+        path: "/about",
+        element: <About></About>,
       },
     ],
   },

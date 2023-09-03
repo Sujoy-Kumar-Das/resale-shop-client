@@ -30,6 +30,12 @@ const Header = () => {
       <li>
         <Link to={"/products/catagorys"}>Products</Link>
       </li>
+      <li>
+        <Link to={"/about"}>About</Link>
+      </li>
+      <li>
+        <Link to={"/blog"}>Blog</Link>
+      </li>
     </>
   );
 

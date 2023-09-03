@@ -58,11 +58,17 @@ const UploadProduct = () => {
         Graphics: data.Graphics,
       },
     };
-    const res = await fetch("http://localhost:5000/upload-product", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(uploadedData),
-    });
+    const res = await fetch(
+      "https://resell-shop-server-sujoy-kumar-das.vercel.app/upload-product",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
+        body: JSON.stringify(uploadedData),
+      }
+    );
     const uploadedResult = await res.json();
     if (uploadedResult.success) {
       toast.success(uploadedResult.message);

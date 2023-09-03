@@ -7,7 +7,9 @@ const AboutUs = () => {
   const { isLoading, data: teamMembers = [] } = useQuery({
     queryKey: ["about"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/about");
+      const res = await fetch(
+        "https://resell-shop-server-sujoy-kumar-das.vercel.app/about"
+      );
       const data = await res.json();
       if (data?.success) {
         return data.about;

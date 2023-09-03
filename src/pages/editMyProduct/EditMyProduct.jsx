@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Spiner from "../shared/spiner/Spiner";
 import { useForm } from "react-hook-form";
 import { validateImage } from "../../commonFuntions/ValidateImage";
 import { toast } from "react-hot-toast";
+import { AuthContextProvider } from "../../contexts/authContext/AuthContext";
 
 const EditMyProduct = () => {
+  const { user } = useContext(AuthContextProvider);
   const {
     register,
     handleSubmit,
@@ -25,7 +27,9 @@ const EditMyProduct = () => {
   } = useQuery([id], {
     queryKey: ["/products/detail"],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:5000/products/detail/${id}`);
+      const res = await fetch(
+        `https://resell-shop-server-sujoy-kumar-das.vercel.app/products/detail/${id}`
+      );
       const data = await res.json();
       if (data.success) {
         return data.productDetail;
@@ -62,13 +66,17 @@ const EditMyProduct = () => {
         Graphics: data.Graphics || productDetail.specification.Graphics,
       },
     };
-    const res = await fetch(`http://localhost:5000/edit?id=${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(editedData),
-    });
+    const res = await fetch(
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/edit?id=${id}&email=${user?.email}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
+        body: JSON.stringify(editedData),
+      }
+    );
     const resData = await res.json();
     if (resData.success) {
       toast.success(resData.message);

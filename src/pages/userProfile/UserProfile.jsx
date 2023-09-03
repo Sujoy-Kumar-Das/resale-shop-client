@@ -21,7 +21,13 @@ const UserProfile = () => {
     queryKey: ["/user"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/user?email=${user?.email}`
+        `https://resell-shop-server-sujoy-kumar-das.vercel.app/user?email=${user?.email}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+          },
+        }
       );
       const data = await res.json();
 
@@ -34,8 +40,14 @@ const UserProfile = () => {
   const handleVerify = async () => {
     setverifyLoader(true);
     const res = await fetch(
-      `http://localhost:5000/verify/user?email=${user?.email}`,
-      { method: "PATCH" }
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/verify/user?email=${user?.email}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
+      }
     );
     const data = await res.json();
     if (data.success) {
@@ -51,11 +63,12 @@ const UserProfile = () => {
   const handeChangeRoleSeller = async () => {
     setLoader(true);
     const res = await fetch(
-      `http://localhost:5000/change/role?email=${user?.email} `,
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/change/role?email=${user?.email} `,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
         },
         body: JSON.stringify({ role: "seller" }),
       }
@@ -75,11 +88,12 @@ const UserProfile = () => {
   const handleChangeRoleSeller = async () => {
     setLoader(true);
     const res = await fetch(
-      `http://localhost:5000/change/role?email=${user?.email} `,
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/change/role?email=${user?.email} `,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
         },
         body: JSON.stringify({ role: "buyer" }),
       }
@@ -99,11 +113,12 @@ const UserProfile = () => {
   const handleChangeRoleBoth = async () => {
     setBothLoader(true);
     const res = await fetch(
-      `http://localhost:5000/change/role?email=${user?.email} `,
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/change/role?email=${user?.email} `,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
         },
         body: JSON.stringify({ role: "both" }),
       }
@@ -121,11 +136,12 @@ const UserProfile = () => {
   };
   const handleClearNotification = async (id) => {
     const res = await fetch(
-      `http://localhost:5000/clear-notification/${userData?.user?._id} `,
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/clear-notification/${userData?.user?._id} `,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
         },
       }
     );
@@ -289,6 +305,7 @@ const UserProfile = () => {
         id={userData?.user?._id}
         handleClearNotification={handleClearNotification}
       ></NotificationModal>
+    
     </>
   );
 };

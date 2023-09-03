@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import Spiner from "../shared/spiner/Spiner";
 import { toast } from "react-hot-toast";
+import { AuthContextProvider } from "../../contexts/authContext/AuthContext";
 
 const AllUsers = () => {
+  const { user } = useContext(AuthContextProvider);
   // load all users
   const {
     data: users,
@@ -13,7 +15,14 @@ const AllUsers = () => {
   } = useQuery({
     queryKey: ["/all-users"],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:5000/all-users`);
+      const res = await fetch(
+        `https://resell-shop-server-sujoy-kumar-das.vercel.app/all-users`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+          },
+        }
+      );
       const data = await res.json();
       if (data.success) {
         return data.users;
@@ -24,9 +33,15 @@ const AllUsers = () => {
   });
   //   handle notify
   const handleNotify = async (id) => {
-    const res = await fetch(`http://localhost:5000/notify-user/${id}`, {
-      method: "PATCH",
-    });
+    const res = await fetch(
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/notify-user/${id}?email=${user?.email}`,
+      {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
+      }
+    );
     const data = await res.json();
     if (data.success) {
       toast.success(data.message);
@@ -37,9 +52,15 @@ const AllUsers = () => {
 
   //   handle accept verification
   const handleAcceptVerification = async (id) => {
-    const res = await fetch(`http://localhost:5000/accept-verification/${id}`, {
-      method: "PATCH",
-    });
+    const res = await fetch(
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/accept-verification/${id}?email=${user?.email}`,
+      {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
+      }
+    );
     const data = await res.json();
     if (data.success) {
       toast.success(data.message);
@@ -52,9 +73,12 @@ const AllUsers = () => {
   // handle Decline verification request
   const handleDeclineVerification = async (id) => {
     const res = await fetch(
-      `http://localhost:5000/decline-verification/${id}`,
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/decline-verification/${id}?email=${user?.email}`,
       {
         method: "PATCH",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
       }
     );
     const data = await res.json();
@@ -69,9 +93,12 @@ const AllUsers = () => {
 
   const handeRetractVerification = async (id) => {
     const res = await fetch(
-      `http://localhost:5000/retract-verification/${id}`,
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/retract-verification/${id}?email=${user?.email}`,
       {
         method: "PATCH",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
       }
     );
     const data = await res.json();
@@ -110,7 +137,7 @@ const AllUsers = () => {
           <tbody>
             {users.map((user, i) => (
               <tr className=" hover" key={user?._id}>
-                {/* {console.log(user)} */}
+               
                 <th>{i + 1}</th>
                 <td>{user?.name}</td>
                 <td>{user?.email}</td>

@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import storeUserInfo from "../../../commonFuntions/StoreUserInfo";
 import { validateImage } from "../../../commonFuntions/ValidateImage";
 import uploadImage from "../../../commonFuntions/UploadImage";
+import getJwtToken from "../../../commonFuntions/getJwt";
 
 const SingUp = () => {
   // auth context
@@ -24,7 +25,7 @@ const SingUp = () => {
   const [loading, setLoading] = useState(false);
   // hooks
   const navigate = useNavigate();
-  
+
   // validate password validation
   const validatedPassword = (password) => {
     if (!password) {
@@ -60,6 +61,7 @@ const SingUp = () => {
       await singupWithEmailAndPass(email, password);
       // Update user profile
       await updateUserProfile(name, image, email, role);
+      getJwtToken(email);
       navigate("/");
     } catch (error) {
       setFirebaseError(error.message);
@@ -70,7 +72,7 @@ const SingUp = () => {
 
   // update user
   const updateUserProfile = async (name, image, email, role) => {
-    const imageURL = await uploadImage(image,errors);
+    const imageURL = await uploadImage(image, errors);
     // for update user informaion
     const userInfo = {
       displayName: name,

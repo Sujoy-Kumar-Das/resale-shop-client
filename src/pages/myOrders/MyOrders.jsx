@@ -28,7 +28,12 @@ const MyOrders = () => {
     queryKey: ["/myOrders"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/myOrders?email=${user?.email}`
+        `https://resell-shop-server-sujoy-kumar-das.vercel.app/myOrders?email=${user?.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+          },
+        }
       );
       const data = await res.json();
       return data;
@@ -37,7 +42,9 @@ const MyOrders = () => {
 
   // view order
   const handleViewOrder = async (id) => {
-    const res = await fetch(`http://localhost:5000/products/detail/${id}`);
+    const res = await fetch(
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/products/detail/${id}`
+    );
     const data = await res.json();
     if (data.success) {
       setOrderedData(data.productDetail);
@@ -46,9 +53,16 @@ const MyOrders = () => {
 
   // cancel order
   const handleCancelOrder = async (id) => {
-    const res = await fetch(`http://localhost:5000/delete/order/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(
+      `https://resell-shop-server-sujoy-kumar-das.vercel.app/delete/order/${id}?email=${user?.email}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("Access_Token")}`,
+        },
+      }
+    );
     const data = await res.json();
     if (data.success) {
       toast.success(data.message);
@@ -60,7 +74,7 @@ const MyOrders = () => {
   };
   // loaded data
   const { success, orders, message } = data;
-
+  
   if (loading || isLoading) {
     return <Spiner></Spiner>;
   }
@@ -101,7 +115,7 @@ const MyOrders = () => {
                 </td>
                 <td>{order?.orderedProduct?.BrandName}</td>
                 <td>{order?.orderedProduct?.model}</td>
-                {console.log(order)}
+                
                 <td>
                   {order?.completed ? (
                     <button
@@ -127,7 +141,7 @@ const MyOrders = () => {
                       Pay Now
                     </label>
                   )}
-                  {/* {console.log(order)} */}
+              
                 </td>
                 <td>
                   <button

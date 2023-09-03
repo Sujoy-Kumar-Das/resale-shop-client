@@ -10,7 +10,7 @@ const DashboardLayout = () => {
   const { user } = useContext(AuthContextProvider);
   const [isAdmin] = useAdmin(user?.email);
   const [isSeller] = useSeller(user?.email);
-  console.log(isSeller);
+ 
   return (
     <>
       <Header></Header>
@@ -28,7 +28,7 @@ const DashboardLayout = () => {
             <li>
               <Link to={`/dashboard/myOrders`}>My Orders</Link>
             </li>
-            {isAdmin || isSeller ? (
+            {isAdmin || isSeller  ? (
               <>
                 <li>
                   <Link to={"/dashboard/myAllProducts"}>My All Products</Link>

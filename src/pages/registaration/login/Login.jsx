@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Social from "../social/Social";
 import { AuthContextProvider } from "../../../contexts/authContext/AuthContext";
 import { toast } from "react-hot-toast";
+import getJwtToken from "../../../commonFuntions/getJwt";
 
 const Login = () => {
   // auth context
@@ -34,6 +35,7 @@ const Login = () => {
         toast.success(`${user?.displayName} Logged in succesfully`);
         reset();
         setLoading(false);
+        getJwtToken(email);
         navigate(from, { replace: true });
       })
       .catch((error) => {
